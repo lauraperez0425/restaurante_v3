@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { AxiosError } from 'axios';
 
 @Injectable()
 export class CategoriasMSService {
@@ -45,11 +46,22 @@ export class CategoriasMSService {
   }
 
   async delete(token: string, id: number) {
-    const res = await firstValueFrom(
-      this.http.delete(`${this.baseURL}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }),
-    );
-    return res.data;
+    try {
+      const res = await firstValueFrom(
+        this.http.delete(`${this.baseURL}/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      );
+      return res.data;
+    } catch (error) {
+      // Propagar el error del microservicio
+      if (error instanceof AxiosError && error.response) {
+        throw new HttpException(
+          error.response.data,
+          error.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      throw error;
+    }
   }
 }

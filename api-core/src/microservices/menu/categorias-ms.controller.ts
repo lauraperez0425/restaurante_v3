@@ -48,7 +48,7 @@ export class CategoriasMSController {
   @Delete(':id')
   @ApiOperation({ summary: 'Eliminar una categoría' })
   @ApiParam({ name: 'id', type: 'number' })
-  delete(@Req() req, @Param('id') id: string) {
+  async delete(@Req() req, @Param('id') id: string) {
     const token = req.headers.authorization?.split(' ')[1];
     return this.categoriasMS.delete(token, Number(id));
   }

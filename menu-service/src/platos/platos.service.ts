@@ -38,7 +38,20 @@ export class PlatosService {
 
   async update(id: number, data: any) {
     const plato = await this.findOne(id);
+    
+    // Si viene categoria_id, buscar y asignar la categoría
+    if (data.categoria_id) {
+      const categoria = await this.categoriaRepo.findOne({
+        where: { id: data.categoria_id },
+      });
+      if (!categoria) throw new NotFoundException('Categoría no válida');
+      plato.categoria = categoria;
+      delete data.categoria_id; // Eliminar para evitar conflicto
+    }
+    
+    // Actualizar los demás campos
     Object.assign(plato, data);
+    
     return this.platoRepo.save(plato);
   }
 

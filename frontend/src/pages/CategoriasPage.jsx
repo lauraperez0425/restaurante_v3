@@ -28,7 +28,13 @@ export default function CategoriasPage() {
       cargar();
     } catch (error) {
       console.error("Error al eliminar:", error);
-      alert("Error al eliminar la categoría");
+      
+      // Extraer el mensaje de error del backend
+      const mensajeError = error.response?.data?.message || 
+                          error.response?.data?.error ||
+                          "Error al eliminar la categoría";
+      
+      alert(mensajeError);
     }
   }
 

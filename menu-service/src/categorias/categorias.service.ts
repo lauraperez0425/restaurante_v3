@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Categoria } from './entities/categoria.entity';
@@ -32,7 +32,21 @@ export class CategoriasService {
   }
 
   async remove(id: number) {
-    const cat = await this.findOne(id);
+    const cat = await this.categoriaRepo.findOne({ 
+      where: { id },
+      relations: ['platos']
+    });
+    
+    if (!cat) {
+      throw new NotFoundException('Categoría no encontrada');
+    }
+
+    if (cat.platos && cat.platos.length > 0) {
+      throw new BadRequestException(
+        `No se puede eliminar la categoría "${cat.nombre}" porque tiene ${cat.platos.length} plato(s) asociado(s). Elimina o reasigna los platos primero.`
+      );
+    }
+
     return this.categoriaRepo.remove(cat);
   }
 }
