@@ -6,8 +6,13 @@ export default function CategoriasPage() {
   const [categorias, setCategorias] = useState([]);
 
   async function cargar() {
-    const data = await getCategorias();
-    setCategorias(data);
+    try {
+      const data = await getCategorias();
+      setCategorias(data);
+    } catch (error) {
+      console.error("Error al cargar categorías:", error);
+      alert("Error al cargar categorías");
+    }
   }
 
   useEffect(() => {
@@ -15,32 +20,118 @@ export default function CategoriasPage() {
   }, []);
 
   async function borrar(id) {
-    await eliminarCategoria(id);
-    cargar();
+    if (!window.confirm("¿Estás seguro de eliminar esta categoría?")) return;
+    
+    try {
+      await eliminarCategoria(id);
+      alert("Categoría eliminada correctamente");
+      cargar();
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+      alert("Error al eliminar la categoría");
+    }
   }
 
   return (
-    <div className="page">
-      <h1>Categorías</h1>
+    <div className="page" style={{ minHeight: "100vh", background: "#f6f8fa", padding: "2rem" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "2rem", color: "#2c3e50" }}>Categorías</h1>
 
-      <Link to="/categorias/crear" className="btn-primary">
-        Nueva categoría
-      </Link>
+      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+        <Link 
+          to="/categorias/crear" 
+          style={{
+            display: "inline-block",
+            padding: "0.8rem 2rem",
+            borderRadius: 10,
+            background: "#27ae60",
+            color: "#fff",
+            fontWeight: 600,
+            textDecoration: "none",
+            fontSize: "1rem",
+            boxShadow: "0 2px 8px rgba(39, 174, 96, 0.3)",
+            transition: "all 0.2s"
+          }}
+        >
+          ➕ Nueva Categoría
+        </Link>
+      </div>
 
-      {categorias.map((c) => (
-        <div key={c.id} className="card">
-          <h3>{c.nombre}</h3>
+      {categorias.length === 0 && (
+        <p style={{ textAlign: "center", color: "#888", marginTop: "3rem" }}>
+          No hay categorías. Crea una nueva categoría.
+        </p>
+      )}
 
-          <Link to={`/categorias/editar/${c.id}`}>Editar</Link>
-
-          <button
-            style={{ marginLeft: "10px", backgroundColor: "red" }}
-            onClick={() => borrar(c.id)}
+      <div style={{ 
+        display: "grid", 
+        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+        gap: "1.5rem", 
+        maxWidth: 1100, 
+        margin: "0 auto" 
+      }}>
+        {categorias.map((c) => (
+          <div
+            key={c.id}
+            style={{
+              background: "#fff",
+              borderRadius: 16,
+              boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+              border: "1px solid #e1e8ed",
+              padding: "1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem"
+            }}
           >
-            Eliminar
-          </button>
-        </div>
-      ))}
+            <h3 style={{ 
+              color: "#1a3557", 
+              marginBottom: "0.5rem", 
+              fontWeight: 600, 
+              fontSize: "1.2rem" 
+            }}>
+              {c.nombre}
+            </h3>
+
+            <div style={{ display: "flex", gap: "0.5rem", marginTop: "auto" }}>
+              <Link
+                to={`/categorias/editar/${c.id}`}
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  padding: "0.5rem 1rem",
+                  borderRadius: 8,
+                  background: "#2980b9",
+                  color: "#fff",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  fontSize: "0.9rem",
+                  transition: "background 0.2s"
+                }}
+              >
+                ✏️ Editar
+              </Link>
+
+              <button
+                onClick={() => borrar(c.id)}
+                style={{
+                  flex: 1,
+                  padding: "0.5rem 1rem",
+                  borderRadius: 8,
+                  background: "#e74c3c",
+                  color: "#fff",
+                  fontWeight: 600,
+                  border: "none",
+                  fontSize: "0.9rem",
+                  cursor: "pointer",
+                  transition: "background 0.2s"
+                }}
+              >
+                🗑️ Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

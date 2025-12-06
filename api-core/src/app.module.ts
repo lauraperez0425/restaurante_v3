@@ -15,20 +15,6 @@ import { CustomHttpModule } from './http/http.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'mysql',
-        host: config.get('DB_HOST'),
-        port: parseInt(config.get('DB_PORT') ?? '3306', 10),
-        username: config.get('DB_USER'),
-        password: config.get('DB_PASS'),
-        database: config.get('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: false,
-      }),
-    }),
-
     // ⭐ Autenticación del Core
     AuthModule,
 

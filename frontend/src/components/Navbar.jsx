@@ -55,7 +55,7 @@ export default function Navbar() {
             <Link to="/carrito" style={navBtnStyle}>🛒 Carrito</Link>
 
             {/* USER */}
-            {user.role === "user" && (
+            {user.rol === 2 && (
               <>
                 <Link to="/mis-pedidos" style={navBtnStyle}>Mis pedidos</Link>
                 <Link to="/reservas/crear" style={navBtnStyle}>Nueva reserva</Link>
@@ -64,7 +64,7 @@ export default function Navbar() {
             )}
 
             {/* ADMIN */}
-            {user.role === "admin" && (
+            {user.rol === 1 && (
               <>
                 <Link to="/platos/crear" style={navBtnStyle}>Crear plato</Link>
                 <Link to="/pedidos" style={navBtnStyle}>Pedidos (Admin)</Link>
@@ -100,7 +100,7 @@ export default function Navbar() {
         ) : (
           <>
             <span style={{ opacity: 0.8 }}>
-              {user.name || user.email} ({user.role})
+              {user.nombre || user.name || user.email} ({user.rol === 1 ? 'Admin' : 'Usuario'})
             </span>
 
             <button

@@ -1,16 +1,16 @@
 import axios from "axios";
 import API_CONFIG from "../config/api.config";
 
-// Crear instancia de axios para el servicio de pedidos
-const orderClient = axios.create({
-  baseURL: API_CONFIG.ORDER_SERVICE.BASE_URL,
+// Crear instancia de axios para el API Gateway
+const apiClient = axios.create({
+  baseURL: API_CONFIG.BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 // Agregar token en las solicitudes si existe
-orderClient.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -24,7 +24,7 @@ orderClient.interceptors.request.use((config) => {
 
 export const getMyOrders = async (userId) => {
   try {
-    const response = await orderClient.get(`${API_CONFIG.ORDER_SERVICE.PEDIDOS}/user/${userId}`);
+    const response = await apiClient.get(API_CONFIG.PEDIDOS.BY_USUARIO(userId));
     return response.data;
   } catch (error) {
     console.error("Error al obtener mis pedidos:", error.response?.data || error.message);
@@ -34,7 +34,7 @@ export const getMyOrders = async (userId) => {
 
 export const getOrderById = async (id) => {
   try {
-    const response = await orderClient.get(`${API_CONFIG.ORDER_SERVICE.PEDIDOS}/${id}`);
+    const response = await apiClient.get(API_CONFIG.PEDIDOS.BY_ID(id));
     return response.data;
   } catch (error) {
     console.error("Error al obtener pedido:", error.response?.data || error.message);
@@ -44,7 +44,7 @@ export const getOrderById = async (id) => {
 
 export const createOrder = async (userId, carrito) => {
   try {
-    const response = await orderClient.post(API_CONFIG.ORDER_SERVICE.PEDIDOS, {
+    const response = await apiClient.post(API_CONFIG.PEDIDOS.BASE, {
       userId,
       items: carrito,
     });
@@ -61,7 +61,7 @@ export const createOrder = async (userId, carrito) => {
 
 export const getAllOrders = async () => {
   try {
-    const response = await orderClient.get(API_CONFIG.ORDER_SERVICE.PEDIDOS);
+    const response = await apiClient.get(API_CONFIG.PEDIDOS.BASE);
     return response.data;
   } catch (error) {
     console.error("Error al obtener todos los pedidos:", error.response?.data || error.message);
@@ -71,7 +71,7 @@ export const getAllOrders = async () => {
 
 export const updateOrderStatus = async (id, newStatus) => {
   try {
-    const response = await orderClient.patch(`${API_CONFIG.ORDER_SERVICE.PEDIDOS}/${id}`, {
+    const response = await apiClient.patch(API_CONFIG.PEDIDOS.BY_ID(id), {
       status: newStatus,
     });
     return response.data;

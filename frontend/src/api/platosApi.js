@@ -1,16 +1,16 @@
 import axios from "axios";
 import API_CONFIG from "../config/api.config";
 
-// Crear instancia de axios para el servicio de menú
-const menuClient = axios.create({
-  baseURL: API_CONFIG.MENU_SERVICE.BASE_URL,
+// Crear instancia de axios para el API Gateway
+const apiClient = axios.create({
+  baseURL: API_CONFIG.BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 // Agregar token en las solicitudes si existe
-menuClient.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -20,7 +20,7 @@ menuClient.interceptors.request.use((config) => {
 
 export const getPlatos = async () => {
   try {
-    const response = await menuClient.get(API_CONFIG.MENU_SERVICE.PLATOS);
+    const response = await apiClient.get(API_CONFIG.PLATOS.BASE);
     return response.data;
   } catch (error) {
     console.error("Error al obtener platos:", error.response?.data || error.message);
@@ -30,7 +30,7 @@ export const getPlatos = async () => {
 
 export const getPlatoById = async (id) => {
   try {
-    const response = await menuClient.get(`${API_CONFIG.MENU_SERVICE.PLATOS}/${id}`);
+    const response = await apiClient.get(API_CONFIG.PLATOS.BY_ID(id));
     return response.data;
   } catch (error) {
     console.error("Error al obtener plato:", error.response?.data || error.message);
@@ -40,7 +40,7 @@ export const getPlatoById = async (id) => {
 
 export const crearPlato = async (data) => {
   try {
-    const response = await menuClient.post(API_CONFIG.MENU_SERVICE.PLATOS, data);
+    const response = await apiClient.post(API_CONFIG.PLATOS.BASE, data);
     return response.data;
   } catch (error) {
     console.error("Error al crear plato:", error.response?.data || error.message);
@@ -50,7 +50,7 @@ export const crearPlato = async (data) => {
 
 export const editarPlato = async (id, data) => {
   try {
-    const response = await menuClient.patch(`${API_CONFIG.MENU_SERVICE.PLATOS}/${id}`, data);
+    const response = await apiClient.patch(API_CONFIG.PLATOS.BY_ID(id), data);
     return response.data;
   } catch (error) {
     console.error("Error al editar plato:", error.response?.data || error.message);
@@ -60,7 +60,7 @@ export const editarPlato = async (id, data) => {
 
 export const eliminarPlato = async (id) => {
   try {
-    const response = await menuClient.delete(`${API_CONFIG.MENU_SERVICE.PLATOS}/${id}`);
+    const response = await apiClient.delete(API_CONFIG.PLATOS.BY_ID(id));
     return response.data;
   } catch (error) {
     console.error("Error al eliminar plato:", error.response?.data || error.message);

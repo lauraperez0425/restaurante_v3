@@ -28,8 +28,31 @@ export default function PlatosPage() {
       : platos.filter((p) => p.categoria_id === Number(categoriaSeleccionada));
 
   return (
-    <div className="page" style={{ minHeight: "100vh", background: "#f6f8fa" }}>
+    <div className="page" style={{ minHeight: "100vh", background: "#f6f8fa", padding: "2rem" }}>
       <h1 style={{ textAlign: "center", marginBottom: "2rem", color: "#2c3e50" }}>Platos</h1>
+
+      {/* BOTÓN CREAR PLATO PARA ADMIN */}
+      {user.rol === 1 && (
+        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+          <Link
+            to="/platos/crear"
+            style={{
+              display: "inline-block",
+              padding: "0.8rem 2rem",
+              borderRadius: 10,
+              background: "#27ae60",
+              color: "#fff",
+              fontWeight: 600,
+              textDecoration: "none",
+              fontSize: "1rem",
+              boxShadow: "0 2px 8px rgba(39, 174, 96, 0.3)",
+              transition: "all 0.2s"
+            }}
+          >
+            ➕ Crear Nuevo Plato
+          </Link>
+        </div>
+      )}
 
       {/* FILTRO */}
       <div style={{ margin: "0 auto 2rem auto", maxWidth: 400, textAlign: "center" }}>
@@ -85,7 +108,7 @@ export default function PlatosPage() {
 
             <div style={{ marginTop: "auto", display: "flex", gap: "1rem" }}>
               {/* EDITAR SOLO ADMIN */}
-              {user.role === "admin" && (
+              {user.rol === 1 && (
                 <Link
                   to={`/platos/editar/${p.id}`}
                   style={{
@@ -106,7 +129,7 @@ export default function PlatosPage() {
               )}
 
               {/* AGREGAR AL CARRITO */}
-              {user.role === "user" && (
+              {user.rol === 2 && (
                 <button
                   style={{
                     background: "#2980b9",

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Req, Body, Param } from '@nestjs/common';
 import { ReservasMSService } from './reservas-ms.service';
 
-@Controller('microservices/reservas')
+@Controller('reservas')
 export class ReservasMSController {
   constructor(private readonly reservasMS: ReservasMSService) {}
 

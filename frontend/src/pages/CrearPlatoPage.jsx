@@ -11,32 +11,58 @@ export default function CrearPlatoPage() {
   const [precio, setPrecio] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
   const [categorias, setCategorias] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function cargarCategorias() {
-      const data = await getCategorias();
-      setCategorias(data);
+      try {
+        const data = await getCategorias();
+        setCategorias(data);
+      } catch (err) {
+        console.error("Error al cargar categorías:", err);
+        setError("Error al cargar categorías");
+      }
     }
     cargarCategorias();
   }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError("");
 
-    await crearPlato({
-      nombre,
-      descripcion,
-      precio: parseFloat(precio),
-      categoria_id: Number(categoriaId),
-    });
+    try {
+      await crearPlato({
+        nombre,
+        descripcion,
+        precio: parseFloat(precio),
+        categoria_id: Number(categoriaId),
+      });
 
-    navigate("/platos");
+      alert("Plato creado exitosamente");
+      navigate("/platos");
+    } catch (err) {
+      console.error("Error al crear plato:", err);
+      setError(err.response?.data?.message || "Error al crear el plato");
+    }
   }
 
   return (
     <div className="page" style={{ minHeight: "100vh", background: "#d6f6fc", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
       <div style={{ background: "#fff", borderRadius: 20, boxShadow: "0 4px 24px #b3e6f7, 0 1.5px 8px #0001", border: "2px solid #b3e6f7", padding: "2.5rem", maxWidth: 500, width: "100%" }}>
         <h1 style={{ textAlign: "center", color: "#1a3557", marginBottom: "2rem", fontWeight: 700 }}>Crear Plato</h1>
+
+        {error && (
+          <div style={{ 
+            background: "#fee", 
+            border: "1px solid #fcc", 
+            borderRadius: 8, 
+            padding: "1rem", 
+            marginBottom: "1rem", 
+            color: "#c33" 
+          }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
           <label style={{ fontWeight: 500, color: "#34495e" }}>
@@ -87,9 +113,45 @@ export default function CrearPlatoPage() {
             </select>
           </label>
 
-          <button style={{ padding: "0.8rem 0", borderRadius: 8, fontWeight: 600, background: "#2980b9", color: "#fff", border: "none", fontSize: "1.1rem", cursor: "pointer", marginTop: "0.5rem", boxShadow: "0 1px 6px #0001" }}>
-            Guardar
-          </button>
+          <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
+            <button
+              type="button"
+              onClick={() => navigate("/platos")}
+              style={{
+                flex: 1,
+                padding: "0.7rem",
+                borderRadius: 8,
+                border: "1px solid #ccc",
+                background: "#fff",
+                color: "#555",
+                fontWeight: 600,
+                fontSize: "1rem",
+                cursor: "pointer",
+                transition: "all 0.2s"
+              }}
+            >
+              Cancelar
+            </button>
+
+            <button 
+              type="submit"
+              style={{ 
+                flex: 1,
+                padding: "0.7rem", 
+                borderRadius: 8, 
+                fontWeight: 600, 
+                background: "#27ae60", 
+                color: "#fff", 
+                border: "none", 
+                fontSize: "1rem", 
+                cursor: "pointer", 
+                boxShadow: "0 2px 8px rgba(39, 174, 96, 0.3)",
+                transition: "all 0.2s"
+              }}
+            >
+              Guardar
+            </button>
+          </div>
         </form>
       </div>
     </div>

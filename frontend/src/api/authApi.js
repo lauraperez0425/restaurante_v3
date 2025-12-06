@@ -1,9 +1,9 @@
 import axios from "axios";
 import API_CONFIG from "../config/api.config";
 
-// Crear instancia de axios con la configuración del servicio de autenticación
-const authClient = axios.create({
-  baseURL: API_CONFIG.AUTH_SERVICE.BASE_URL,
+// Crear instancia de axios con la configuración del API Gateway
+const apiClient = axios.create({
+  baseURL: API_CONFIG.BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,7 +11,7 @@ const authClient = axios.create({
 
 export const loginRequest = async (email, password) => {
   try {
-    const response = await authClient.post(API_CONFIG.AUTH_SERVICE.LOGIN, {
+    const response = await apiClient.post(API_CONFIG.AUTH.LOGIN, {
       email,
       password,
     });
@@ -24,7 +24,7 @@ export const loginRequest = async (email, password) => {
 
 export const registerRequest = async (userData) => {
   try {
-    const response = await authClient.post(API_CONFIG.AUTH_SERVICE.REGISTER, userData);
+    const response = await apiClient.post(API_CONFIG.AUTH.REGISTER, userData);
     return response.data;
   } catch (error) {
     console.error("Error en registro:", error.response?.data || error.message);

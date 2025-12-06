@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class PlatosMSService {
-  private baseURL = 'http://localhost:3003/platos';
+  private baseURL = 'http://localhost:3003/api/platos';
 
   constructor(private readonly http: HttpService) {}
 

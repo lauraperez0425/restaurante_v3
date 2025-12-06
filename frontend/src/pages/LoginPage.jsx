@@ -16,11 +16,14 @@ export default function LoginPage() {
     setError("");
 
     try {
+      console.log("Intentando login con:", email);
       await login(email, password);
+      console.log("Login exitoso, navegando a /platos");
       navigate("/platos");
     } catch (err) {
-      console.error(err);
-      setError("Credenciales inválidas o error en el servidor");
+      console.error("Error en login:", err);
+      console.error("Respuesta del servidor:", err.response?.data);
+      setError(err.response?.data?.message || "Credenciales inválidas o error en el servidor");
     }
   };
 

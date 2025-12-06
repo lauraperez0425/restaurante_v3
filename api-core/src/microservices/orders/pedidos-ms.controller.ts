@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Req, Body, Param } from '@nestjs/common';
 import { PedidosMSService } from './pedidos-ms.service';
 
-@Controller('microservices/pedidos')
+@Controller('pedidos')
 export class PedidosMSController {
   constructor(private readonly pedidosMS: PedidosMSService) {}
 

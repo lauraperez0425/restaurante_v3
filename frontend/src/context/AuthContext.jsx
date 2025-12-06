@@ -10,20 +10,39 @@ export function AuthProvider({ children }) {
 
   // Cargar sesión desde localStorage
   useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    try {
+      const savedToken = localStorage.getItem("token");
+      const savedUser = localStorage.getItem("user");
+      if (savedToken && savedUser && savedUser !== "undefined") {
+        setToken(savedToken);
+        setUser(JSON.parse(savedUser));
+      }
+    } catch (error) {
+      console.error("Error al cargar sesión:", error);
+      // Limpiar localStorage si hay datos corruptos
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
   }, []);
 
   const login = async (email, password) => {
-    const data = await loginRequest(email, password); // {user, token}
-    setUser(data.user);
-    setToken(data.token);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    console.log("AuthContext: Llamando a loginRequest...");
+    const data = await loginRequest(email, password);
+    console.log("AuthContext: Respuesta recibida:", data);
+    
+    // El backend devuelve { ok, mensaje, token, usuario }
+    const token = data.token;
+    const user = data.usuario || data.user; // Soportar ambos formatos
+    
+    if (!token) {
+      throw new Error("Respuesta del servidor inválida: falta token");
+    }
+    
+    setUser(user);
+    setToken(token);
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    console.log("AuthContext: Login completado, usuario guardado");
   };
 
   const logout = () => {

@@ -62,7 +62,12 @@ export class AuthService {
       ok: true,
       mensaje: 'Inicio de sesión exitoso',
       token,
-      usuario,
+      usuario: {
+        id: usuario.id_usuario,
+        nombre: usuario.nombre_usuario,
+        email: usuario.email,
+        rol: usuario.id_rol,
+      },
     };
   }
 }

@@ -12,7 +12,7 @@ import { AuthModule } from './auth/auth.module';   // ⭐ NECESARIO para JWT + r
     ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as any,
+      type: 'mysql',
       host: process.env.DB_HOST,
       port: 3306,
       username: process.env.DB_USER,

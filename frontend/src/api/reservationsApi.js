@@ -1,16 +1,16 @@
 import axios from "axios";
 import API_CONFIG from "../config/api.config";
 
-// Crear instancia de axios para el servicio de reservas
-const reservationClient = axios.create({
-  baseURL: API_CONFIG.RESERVATION_SERVICE.BASE_URL,
+// Crear instancia de axios para el API Gateway
+const apiClient = axios.create({
+  baseURL: API_CONFIG.BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 // Agregar token en las solicitudes si existe
-reservationClient.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -24,9 +24,7 @@ reservationClient.interceptors.request.use((config) => {
 
 export const getMyReservations = async (userId) => {
   try {
-    const response = await reservationClient.get(
-      `${API_CONFIG.RESERVATION_SERVICE.RESERVAS}/user/${userId}`
-    );
+    const response = await apiClient.get(API_CONFIG.RESERVAS.BY_USUARIO(userId));
     return response.data;
   } catch (error) {
     console.error("Error al obtener mis reservas:", error.response?.data || error.message);
@@ -36,7 +34,7 @@ export const getMyReservations = async (userId) => {
 
 export const createReservation = async (userId, fecha, hora) => {
   try {
-    const response = await reservationClient.post(API_CONFIG.RESERVATION_SERVICE.RESERVAS, {
+    const response = await apiClient.post(API_CONFIG.RESERVAS.BASE, {
       userId,
       fecha,
       hora,
@@ -54,7 +52,7 @@ export const createReservation = async (userId, fecha, hora) => {
 
 export const getAllReservations = async () => {
   try {
-    const response = await reservationClient.get(API_CONFIG.RESERVATION_SERVICE.RESERVAS);
+    const response = await apiClient.get(API_CONFIG.RESERVAS.BASE);
     return response.data;
   } catch (error) {
     console.error("Error al obtener todas las reservas:", error.response?.data || error.message);
@@ -64,8 +62,8 @@ export const getAllReservations = async () => {
 
 export const updateReservationStatus = async (id, newStatus) => {
   try {
-    const response = await reservationClient.patch(
-      `${API_CONFIG.RESERVATION_SERVICE.RESERVAS}/${id}`,
+    const response = await apiClient.patch(
+      API_CONFIG.RESERVAS.BY_ID(id),
       { status: newStatus }
     );
     return response.data;

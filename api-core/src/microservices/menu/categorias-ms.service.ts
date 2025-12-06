@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class CategoriasMSService {
-  private baseURL = 'http://localhost:3003/categorias';
+  private baseURL = 'http://localhost:3003/api/categorias';
 
   constructor(private readonly http: HttpService) {}
 
