@@ -2,7 +2,7 @@
 
 Registro de cambios importantes del proyecto Restaurante V3.
 
-## [3.0.0] - 2024-12-13
+## [3.0.0] - 13 de diciembre de 2024
 
 ### 🎉 Versión Final del Sistema
 
