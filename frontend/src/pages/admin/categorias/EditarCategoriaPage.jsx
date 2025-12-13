@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCategorias, editarCategoria } from "../api/categoriasApi";
+import { getCategorias, editarCategoria } from "../../../api/categoriasApi";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditarCategoriaPage() {

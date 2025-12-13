@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { editarPlato, getPlatos } from "../api/platosApi";
-import { getCategorias } from "../api/categoriasApi";
-import { useAuth } from "../context/AuthContext";
+import { editarPlato, getPlatos } from "../../../api/platosApi";
+import { getCategorias } from "../../../api/categoriasApi";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function EditarPlatoPage() {
   const { id } = useParams();
@@ -56,13 +56,45 @@ export default function EditarPlatoPage() {
     e.preventDefault();
     setError("");
 
+    // Validaciones del lado del cliente
+    if (nombre.trim().length < 3) {
+      setError("El nombre debe tener al menos 3 caracteres");
+      return;
+    }
+
+    if (nombre.trim().length > 100) {
+      setError("El nombre no puede exceder 100 caracteres");
+      return;
+    }
+
+    const precioNum = parseFloat(precio);
+    if (isNaN(precioNum) || precioNum <= 0) {
+      setError("El precio debe ser mayor a 0");
+      return;
+    }
+
+    if (precioNum > 10000) {
+      setError("El precio no puede exceder 10,000 Bs");
+      return;
+    }
+
+    if (!categoriaId || categoriaId === "") {
+      setError("Debe seleccionar una categoría");
+      return;
+    }
+
+    if (descripcion && descripcion.length > 500) {
+      setError("La descripción no puede exceder 500 caracteres");
+      return;
+    }
+
     try {
       await editarPlato(
         id,
         {
-          nombre,
-          descripcion,
-          precio: parseFloat(precio),
+          nombre: nombre.trim(),
+          descripcion: descripcion.trim(),
+          precio: precioNum,
           categoria_id: Number(categoriaId),
           disponible,
         },
@@ -73,7 +105,11 @@ export default function EditarPlatoPage() {
       navigate("/platos");
     } catch (err) {
       console.error("Error al actualizar plato:", err);
-      setError(err.response?.data?.message || "Error al actualizar el plato");
+      const mensajeError = err.response?.data?.message || 
+                          (Array.isArray(err.response?.data?.message) 
+                            ? err.response.data.message.join(', ') 
+                            : "Error al actualizar el plato");
+      setError(mensajeError);
     }
   }
 

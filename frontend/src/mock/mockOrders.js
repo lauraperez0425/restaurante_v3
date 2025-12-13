@@ -30,7 +30,7 @@ let pedidos = [
     usuarioId: 1,
     fecha: "2025-01-01",
     total: 58,
-    estado: "pendiente",
+    estado: "Pendiente",
     items: [{ id: 5, nombre: "Helado artesanal", precio: 12 }],
     detalles: [{ nombre: "Helado artesanal", cantidad: 1, subtotal: 12 }],
   },
@@ -51,7 +51,7 @@ export async function mockCrearPedido(items) {
     usuarioId: 1, // simulado
     fecha: new Date().toISOString(),
     total,
-    estado: "pendiente",
+    estado: "Pendiente",
     items,
     detalles,
   };

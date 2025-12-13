@@ -23,24 +23,31 @@ export class PedidosController {
     return this.service.obtenerTodos();
   }
 
+  // Obtener pedidos por usuario
+  @UseGuards(JwtAuthGuard)
+  @Get('usuario/:usuario_id')
+  obtenerPorUsuario(@Param('usuario_id') usuario_id: string) {
+    return this.service.obtenerPorUsuario(+usuario_id);
+  }
+
   // Obtener pedido por ID
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  obtenerPedido(@Param('id') id: number) {
-    return this.service.obtenerPedido(id);
+  obtenerPedido(@Param('id') id: string) {
+    return this.service.obtenerPedido(+id);
   }
 
   // Eliminar pedido
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  eliminarPedido(@Param('id') id: number) {
-    return this.service.eliminarPedido(id);
+  eliminarPedido(@Param('id') id: string) {
+    return this.service.eliminarPedido(+id);
   }
 
   // Actualizar estado del pedido
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  actualizarEstado(@Param('id') id: number, @Body('estado') estado: string) {
-    return this.service.actualizarEstado(id, estado);
+  actualizarEstado(@Param('id') id: string, @Body('estado') estado: string) {
+    return this.service.actualizarEstado(+id, estado);
   }
 }

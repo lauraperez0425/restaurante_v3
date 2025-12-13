@@ -72,7 +72,7 @@ export const getAllOrders = async () => {
 export const updateOrderStatus = async (id, newStatus) => {
   try {
     const response = await apiClient.patch(API_CONFIG.PEDIDOS.BY_ID(id), {
-      status: newStatus,
+      estado: newStatus,
     });
     return response.data;
   } catch (error) {

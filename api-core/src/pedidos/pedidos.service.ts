@@ -24,6 +24,13 @@ export class PedidosService {
     return await this.pedidoRepo.find({ where: { borrado: false } });
   }
 
+  async findByUsuario(usuario_id: number) {
+    return await this.pedidoRepo.find({ 
+      where: { id_cliente: usuario_id, borrado: false },
+      order: { fecha_pedido: 'DESC' }
+    });
+  }
+
   async findOne(id: number) {
     const pedido = await this.pedidoRepo.findOne({ where: { id_pedido: id, borrado: false } });
     if (!pedido) throw new NotFoundException(`Pedido ${id} no encontrado`);

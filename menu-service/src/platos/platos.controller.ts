@@ -1,5 +1,7 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, Req } from '@nestjs/common';
 import { PlatosService } from './platos.service';
+import { CreatePlatoDto } from './dto/create-plato.dto';
+import { UpdatePlatoDto } from './dto/update-plato.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/role.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -29,15 +31,15 @@ export class PlatosController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1)
   @Post()
-  create(@Body() data: any) {
-    return this.service.create(data);
+  create(@Body() dto: CreatePlatoDto) {
+    return this.service.create(dto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    return this.service.update(Number(id), data);
+  update(@Param('id') id: string, @Body() dto: UpdatePlatoDto) {
+    return this.service.update(Number(id), dto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

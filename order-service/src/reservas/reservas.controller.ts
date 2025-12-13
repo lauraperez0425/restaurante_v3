@@ -24,24 +24,31 @@ export class ReservasController {
     return this.service.obtenerReservas();
   }
 
+  // Obtener reservas por usuario
+  @UseGuards(JwtAuthGuard)
+  @Get('usuario/:usuarioId')
+  obtenerReservasPorUsuario(@Param('usuarioId') usuarioId: string) {
+    return this.service.obtenerReservasPorUsuario(+usuarioId);
+  }
+
   // Obtener una reserva por ID
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  obtenerReserva(@Param('id') id: number) {
-    return this.service.obtenerReserva(id);
+  obtenerReserva(@Param('id') id: string) {
+    return this.service.obtenerReserva(+id);
   }
 
   // Actualizar una reserva
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  actualizarReserva(@Param('id') id: number, @Body() body: any) {
-    return this.service.actualizarReserva(id, body);
+  actualizarReserva(@Param('id') id: string, @Body() body: any) {
+    return this.service.actualizarReserva(+id, body);
   }
 
   // Eliminar una reserva
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  eliminarReserva(@Param('id') id: number) {
-    return this.service.eliminarReserva(id);
+  eliminarReserva(@Param('id') id: string) {
+    return this.service.eliminarReserva(+id);
   }
 }

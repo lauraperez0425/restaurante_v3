@@ -1,9 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useCarrito } from "../context/CarritoContext";
+import { useNotifications } from "../context/NotificationsContext";
 import logo from "../assets/logo.png";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const carrito = useCarrito();
+  const { pendingReservations, pendingOrders, totalNotifications } = useNotifications();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -52,11 +56,33 @@ export default function Navbar() {
           <>
             {/* PLATOS */}
             <Link to="/platos" style={navBtnStyle}>Platos</Link>
-            <Link to="/carrito" style={navBtnStyle}>🛒 Carrito</Link>
 
             {/* USER */}
             {user.rol === 2 && (
               <>
+                <Link to="/carrito" style={{ ...navBtnStyle, position: 'relative' }}>
+                  Carrito
+                  {carrito?.totalItems > 0 && (
+                    <span style={{
+                      position: 'absolute',
+                      top: '-8px',
+                      right: '-8px',
+                      backgroundColor: '#e74c3c',
+                      color: 'white',
+                      borderRadius: '50%',
+                      width: '22px',
+                      height: '22px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      border: '2px solid white'
+                    }}>
+                      {carrito.totalItems}
+                    </span>
+                  )}
+                </Link>
                 <Link to="/mis-pedidos" style={navBtnStyle}>Mis pedidos</Link>
                 <Link to="/reservas/crear" style={navBtnStyle}>Nueva reserva</Link>
                 <Link to="/mis-reservas" style={navBtnStyle}>Mis reservas</Link>
@@ -67,8 +93,54 @@ export default function Navbar() {
             {user.rol === 1 && (
               <>
                 <Link to="/platos/crear" style={navBtnStyle}>Crear plato</Link>
-                <Link to="/pedidos" style={navBtnStyle}>Pedidos (Admin)</Link>
-                <Link to="/reservas" style={navBtnStyle}>Reservas (Admin)</Link>
+                <Link to="/pedidos" style={{ ...navBtnStyle, position: 'relative' }}>
+                  Pedidos (Admin)
+                  {pendingOrders > 0 && (
+                    <span style={{
+                      position: 'absolute',
+                      top: '-8px',
+                      right: '-8px',
+                      backgroundColor: '#ef4444',
+                      color: 'white',
+                      borderRadius: '50%',
+                      width: '22px',
+                      height: '22px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      border: '2px solid white',
+                      animation: 'pulse 2s infinite'
+                    }}>
+                      {pendingOrders}
+                    </span>
+                  )}
+                </Link>
+                <Link to="/reservas" style={{ ...navBtnStyle, position: 'relative' }}>
+                  Reservas (Admin)
+                  {pendingReservations > 0 && (
+                    <span style={{
+                      position: 'absolute',
+                      top: '-8px',
+                      right: '-8px',
+                      backgroundColor: '#f59e0b',
+                      color: 'white',
+                      borderRadius: '50%',
+                      width: '22px',
+                      height: '22px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      border: '2px solid white',
+                      animation: 'pulse 2s infinite'
+                    }}>
+                      {pendingReservations}
+                    </span>
+                  )}
+                </Link>
                 <Link to="/categorias" style={navBtnStyle}>Categorías</Link>
               </>
             )}
@@ -99,20 +171,52 @@ export default function Navbar() {
           </Link>
         ) : (
           <>
-            <span style={{ opacity: 0.8 }}>
-              {user.nombre || user.name || user.email} ({user.rol === 1 ? 'Admin' : 'Usuario'})
-            </span>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              backdropFilter: 'blur(10px)'
+            }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '14px'
+              }}>
+                {(user.nombre || user.name || user.email).charAt(0).toUpperCase()}
+              </div>
+              <span style={{ 
+                fontWeight: '600',
+                color: '#1a3557',
+                fontSize: '15px'
+              }}>
+                {user.nombre || user.name || user.email.split('@')[0]}
+              </span>
+            </div>
 
             <button
               onClick={handleLogout}
               style={{
-                padding: "6px 12px",
-                borderRadius: "4px",
+                padding: "8px 16px",
+                borderRadius: "8px",
                 border: "none",
                 backgroundColor: "#ef4444",
                 color: "white",
                 cursor: "pointer",
+                fontWeight: "600",
+                transition: "background 0.2s"
               }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = "#dc2626"}
+              onMouseLeave={(e) => e.target.style.backgroundColor = "#ef4444"}
             >
               Cerrar sesión
             </button>
@@ -130,6 +234,17 @@ export default function Navbar() {
 
         .nav-link:hover {
           text-decoration: underline;
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 0.9;
+          }
         }
       `}</style>
     </nav>

@@ -7,6 +7,7 @@ import { Reserva } from './reservas/reserva.entity';
 
 import { PedidosModule } from './pedidos/pedidos.module';
 import { Pedido } from './pedidos/pedido.entity';
+import { PedidoDetalle } from './pedidos/pedido-detalle.entity';
 
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/auth.middleware';
@@ -22,7 +23,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
-      entities: [Pedido, Reserva],
+      entities: [Pedido, PedidoDetalle, Reserva],
       synchronize: true,
     }),
 

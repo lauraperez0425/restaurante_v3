@@ -11,6 +11,18 @@ export class ReservasMSController {
     return this.reservasMS.getAll(token);
   }
 
+  @Get('usuario/:usuarioId')
+  getByUsuario(@Req() req, @Param('usuarioId') usuarioId: string) {
+    const token = req.headers.authorization?.split(' ')[1];
+    return this.reservasMS.getByUsuario(token, +usuarioId);
+  }
+
+  @Get(':id')
+  getById(@Req() req, @Param('id') id: string) {
+    const token = req.headers.authorization?.split(' ')[1];
+    return this.reservasMS.getById(token, +id);
+  }
+
   @Post()
   create(@Req() req, @Body() data: any) {
     const token = req.headers.authorization?.split(' ')[1];

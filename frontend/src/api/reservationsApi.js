@@ -35,7 +35,6 @@ export const getMyReservations = async (userId) => {
 export const createReservation = async (userId, fecha, hora) => {
   try {
     const response = await apiClient.post(API_CONFIG.RESERVAS.BASE, {
-      userId,
       fecha,
       hora,
     });
@@ -60,11 +59,21 @@ export const getAllReservations = async () => {
   }
 };
 
+export const getReservationById = async (id) => {
+  try {
+    const response = await apiClient.get(API_CONFIG.RESERVAS.BY_ID(id));
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener reserva:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const updateReservationStatus = async (id, newStatus) => {
   try {
     const response = await apiClient.patch(
       API_CONFIG.RESERVAS.BY_ID(id),
-      { status: newStatus }
+      { estado: newStatus }
     );
     return response.data;
   } catch (error) {

@@ -3,27 +3,40 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ProtectedRoute from "../components/ProtectedRoute";
 
-import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
+// Auth & Public
+import HomePage from "../pages/auth/HomePage";
+import LoginPage from "../pages/auth/LoginPage";
+import RegistroPage from "../pages/auth/RegistroPage";
 
-import PlatosPage from "../pages/PlatosPage";
-import CrearPlatoPage from "../pages/CrearPlatoPage";
-import EditarPlatoPage from "../pages/EditarPlatoPage";
+// Cliente - Platos
+import PlatosPage from "../pages/cliente/platos/PlatosPage";
 
-import CategoriasPage from "../pages/CategoriasPage";
-import CrearCategoriaPage from "../pages/CrearCategoriaPage";
-import EditarCategoriaPage from "../pages/EditarCategoriaPage";
+// Cliente - Pedidos
+import CarritoPage from "../pages/cliente/pedidos/CarritoPage";
+import CrearPedidoPage from "../pages/cliente/pedidos/CrearPedidoPage";
+import MisPedidosPage from "../pages/cliente/pedidos/MisPedidosPage";
+import PedidoDetallePage from "../pages/cliente/pedidos/PedidoDetallePage";
 
-import CarritoPage from "../pages/CarritoPage";
-import CrearPedidoPage from "../pages/CrearPedidoPage";
-import MisPedidosPage from "../pages/MisPedidosPage";
-import PedidosAdminPage from "../pages/PedidosAdminPage";
-import PedidoDetallePage from "../pages/PedidoDetallePage";
-import CambiarEstadoPedidoPage from "../pages/CambiarEstadoPedidoPage";
+// Cliente - Reservas
+import CrearReservaPage from "../pages/cliente/reservas/CrearReservaPage";
+import MisReservasPage from "../pages/cliente/reservas/MisReservasPage";
 
-import CrearReservaPage from "../pages/CrearReservaPage";
-import MisReservasPage from "../pages/MisReservasPage";
-import ReservasAdminPage from "../pages/ReservasAdminPage";
+// Admin - Platos
+import CrearPlatoPage from "../pages/admin/platos/CrearPlatoPage";
+import EditarPlatoPage from "../pages/admin/platos/EditarPlatoPage";
+
+// Admin - Categorías
+import CategoriasPage from "../pages/admin/categorias/CategoriasPage";
+import CrearCategoriaPage from "../pages/admin/categorias/CrearCategoriaPage";
+import EditarCategoriaPage from "../pages/admin/categorias/EditarCategoriaPage";
+
+// Admin - Pedidos
+import PedidosAdminPage from "../pages/admin/pedidos/PedidosAdminPage";
+import CambiarEstadoPedidoPage from "../pages/admin/pedidos/CambiarEstadoPedidoPage";
+
+// Admin - Reservas
+import ReservasAdminPage from "../pages/admin/reservas/ReservasAdminPage";
+import ReservaDetallePage from "../pages/admin/reservas/ReservaDetallePage";
 
 export default function AppRouter() {
   return (
@@ -33,6 +46,7 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/registro" element={<RegistroPage />} />
 
         <Route
           path="/platos"
@@ -165,6 +179,15 @@ export default function AppRouter() {
           element={
             <ProtectedRoute requiredRole="admin">
               <ReservasAdminPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reservas/:id"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <ReservaDetallePage />
             </ProtectedRoute>
           }
         />

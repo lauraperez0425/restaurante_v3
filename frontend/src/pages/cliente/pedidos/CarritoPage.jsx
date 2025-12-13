@@ -1,39 +1,13 @@
-import { useEffect, useState } from "react";
-import CarritoItem from "../components/CarritoItem";
+import { useCarrito } from "../../../context/CarritoContext";
+import CarritoItem from "../../../components/CarritoItem";
 import { Link } from "react-router-dom";
 
 export default function CarritoPage() {
-  const [carrito, setCarrito] = useState([]);
+  const { items, actualizarCantidad, eliminarItem, limpiarCarrito } = useCarrito();
 
-  useEffect(() => {
-    const stored = localStorage.getItem("carrito");
-    if (stored) setCarrito(JSON.parse(stored));
-  }, []);
+  const total = items.reduce((s, i) => s + (parseFloat(i.precio || 0) * i.cantidad), 0);
 
-  function actualizarCantidad(plato_id, cantidad) {
-    const actualizado = carrito.map((item) =>
-      item.plato_id === plato_id
-        ? {
-            ...item,
-            cantidad,
-            subtotal: cantidad * item.precio,
-          }
-        : item
-    );
-
-    setCarrito(actualizado);
-    localStorage.setItem("carrito", JSON.stringify(actualizado));
-  }
-
-  function eliminarItem(plato_id) {
-    const nuevo = carrito.filter((item) => item.plato_id !== plato_id);
-    setCarrito(nuevo);
-    localStorage.setItem("carrito", JSON.stringify(nuevo));
-  }
-
-  const total = carrito.reduce((s, i) => s + i.subtotal, 0);
-
-  if (carrito.length === 0)
+  if (items.length === 0)
     return (
       <div className="page" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f6f8fa" }}>
         <div style={{ background: "#fff", borderRadius: 16, boxShadow: "0 2px 16px #0002", padding: "2.5rem 2rem", maxWidth: 350, width: "100%", textAlign: "center" }}>
@@ -48,18 +22,18 @@ export default function CarritoPage() {
       <h1 style={{ textAlign: "center", marginBottom: "2rem", color: "#2c3e50" }}>Mi Carrito</h1>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "2rem", maxWidth: 900, margin: "0 auto 2rem auto" }}>
-        {carrito.map((item) => (
+        {items.map((item) => (
           <CarritoItem
-            key={item.plato_id}
-            item={item}
-            actualizarCantidad={actualizarCantidad}
-            eliminar={eliminarItem}
+            key={item.id}
+            item={{ ...item, plato_id: item.id, subtotal: item.precio * item.cantidad }}
+            actualizarCantidad={(id, cantidad) => actualizarCantidad(id, cantidad)}
+            eliminar={(id) => eliminarItem(id)}
           />
         ))}
       </div>
 
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-        <h2 style={{ color: "#27ae60", fontWeight: 700 }}>Total: {total} Bs</h2>
+        <h2 style={{ color: "#27ae60", fontWeight: 700 }}>Total: {total.toFixed(2)} Bs</h2>
         <Link className="btn-primary" to="/pedidos/crear" style={{ padding: "0.8rem 2rem", borderRadius: 8, fontWeight: 600, background: "#2980b9", color: "#fff", border: "none", fontSize: "1.1rem", textDecoration: "none", display: "inline-block", marginTop: "1rem" }}>
           Confirmar pedido
         </Link>

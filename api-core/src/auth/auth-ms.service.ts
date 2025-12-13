@@ -9,22 +9,26 @@ export class AuthMSService {
   constructor(private readonly http: HttpService) {}
 
   async login(data: any) {
-    const response = await firstValueFrom(
-      this.http.post(`${this.authURL}/login`, data, {
-        validateStatus: () => true, // <-- Aceptar 200, 201, etc.
-      })
-    );
-
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.http.post(`${this.authURL}/login`, data)
+      );
+      return response.data;
+    } catch (error) {
+      // Propagar el error del microservicio
+      throw error.response?.data || error;
+    }
   }
 
   async register(data: any) {
-    const response = await firstValueFrom(
-      this.http.post(`${this.authURL}/register`, data, {
-        validateStatus: () => true, // <-- Muy importante
-      })
-    );
-
-    return response.data;
+    try {
+      const response = await firstValueFrom(
+        this.http.post(`${this.authURL}/register`, data)
+      );
+      return response.data;
+    } catch (error) {
+      // Propagar el error del microservicio
+      throw error.response?.data || error;
+    }
   }
 }

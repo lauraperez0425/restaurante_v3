@@ -27,6 +27,11 @@ export class ReservasService {
     return this.reservasRepo.find();
   }
 
+  // Obtener por usuario
+  obtenerReservasPorUsuario(usuarioId: number) {
+    return this.reservasRepo.find({ where: { usuario_id: usuarioId } });
+  }
+
   // Obtener una
   async obtenerReserva(id: number) {
     const reserva = await this.reservasRepo.findOne({ where: { id } });

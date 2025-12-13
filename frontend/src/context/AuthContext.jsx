@@ -7,6 +7,7 @@ export const useAuth = () => useContext(AuthContext);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   // Cargar sesión desde localStorage
   useEffect(() => {
@@ -43,6 +44,12 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
     console.log("AuthContext: Login completado, usuario guardado");
+    
+    // Mostrar animación de bienvenida solo para clientes (rol 2)
+    if (user.rol === 2) {
+      setShowWelcome(true);
+      setTimeout(() => setShowWelcome(false), 3100);
+    }
   };
 
   const logout = () => {
@@ -53,7 +60,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, showWelcome }}>
       {children}
     </AuthContext.Provider>
   );

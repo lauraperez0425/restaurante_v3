@@ -21,6 +21,12 @@ export class PedidosController {
     return this.pedidosService.findAll();
   }
 
+  @Get('usuario/:usuario_id')
+  @ApiOperation({ summary: 'Obtener pedidos de un usuario' })
+  findByUsuario(@Param('usuario_id', ParseIntPipe) usuario_id: number) {
+    return this.pedidosService.findByUsuario(usuario_id);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un pedido por ID' })
   findOne(@Param('id', ParseIntPipe) id: number) {

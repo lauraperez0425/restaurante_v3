@@ -70,4 +70,21 @@ export class AuthService {
       },
     };
   }
+
+  async findById(id: number) {
+    const usuario = await this.usuarioRepo.findOne({ where: { id_usuario: id } });
+    
+    if (!usuario) {
+      return null;
+    }
+
+    return {
+      id: usuario.id_usuario,
+      nombre: usuario.nombre_usuario,
+      apellido: usuario.apellido_usuario,
+      email: usuario.email,
+      telefono: usuario.telefono,
+      rol: usuario.id_rol,
+    };
+  }
 }

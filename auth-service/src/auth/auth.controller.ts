@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { RegisterDto } from './dto/register.dto';
@@ -21,5 +21,12 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Credenciales inválidas' })
   login(@Body() data: LoginDto) {
     return this.authService.login(data.email, data.password);
+  }
+
+  @Get('usuario/:id')
+  @ApiResponse({ status: 200, description: 'Usuario encontrado' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
+  getUsuarioById(@Param('id') id: number) {
+    return this.authService.findById(id);
   }
 }

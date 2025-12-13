@@ -17,6 +17,24 @@ export class PedidosMSService {
     return res.data;
   }
 
+  async getByUsuario(token: string, usuario_id: number) {
+    const res = await firstValueFrom(
+      this.http.get(`${this.baseURL}/usuario/${usuario_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    );
+    return res.data;
+  }
+
+  async getById(token: string, id: number) {
+    const res = await firstValueFrom(
+      this.http.get(`${this.baseURL}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    );
+    return res.data;
+  }
+
   async create(token: string, data: any) {
     const res = await firstValueFrom(
       this.http.post(this.baseURL, data, {

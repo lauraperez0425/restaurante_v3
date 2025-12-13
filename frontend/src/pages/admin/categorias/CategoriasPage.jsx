@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCategorias, eliminarCategoria } from "../api/categoriasApi";
+import { getCategorias, eliminarCategoria } from "../../../api/categoriasApi";
 import { Link } from "react-router-dom";
 
 export default function CategoriasPage() {
@@ -114,7 +114,7 @@ export default function CategoriasPage() {
                   transition: "background 0.2s"
                 }}
               >
-                ✏️ Editar
+                Editar
               </Link>
 
               <button
@@ -132,7 +132,7 @@ export default function CategoriasPage() {
                   transition: "background 0.2s"
                 }}
               >
-                🗑️ Eliminar
+                Eliminar
               </button>
             </div>
           </div>

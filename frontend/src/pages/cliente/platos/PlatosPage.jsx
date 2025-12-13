@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { getPlatos, eliminarPlato } from "../api/platosApi";
-import { getCategorias } from "../api/categoriasApi";
+import { getPlatos, eliminarPlato } from "../../../api/platosApi";
+import { getCategorias } from "../../../api/categoriasApi";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
+import { useCarrito } from "../../../context/CarritoContext";
+import { showToast } from "../../../components/Toast";
 
 export default function PlatosPage() {
   const { user } = useAuth();
+  const { agregarItem } = useCarrito();
 
   const [platos, setPlatos] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -124,7 +127,7 @@ export default function PlatosPage() {
                 transition: "background 0.2s"
               }}
             >
-              ✏️ Editar
+              Editar
             </Link>
 
             <button
@@ -143,7 +146,7 @@ export default function PlatosPage() {
                 transition: "background 0.2s"
               }}
             >
-              🗑️ Eliminar
+              Eliminar
             </button>
           </>
         )}
@@ -165,32 +168,15 @@ export default function PlatosPage() {
               transition: "background 0.2s"
             }}
             onClick={() => {
-              const stored = localStorage.getItem("carrito");
-              let carrito = stored ? JSON.parse(stored) : [];
-
-              const existente = carrito.find(
-                (i) => i.plato_id === p.id
-              );
-
-              if (existente) {
-                existente.cantidad++;
-                existente.subtotal =
-                  existente.cantidad * existente.precio;
-              } else {
-                carrito.push({
-                  plato_id: p.id,
-                  nombre: p.nombre,
-                  precio: p.precio,
-                  cantidad: 1,
-                  subtotal: p.precio,
-                });
-              }
-
-              localStorage.setItem("carrito", JSON.stringify(carrito));
-              alert("Agregado al carrito");
+              agregarItem({
+                id: p.id,
+                nombre: p.nombre,
+                precio: parseFloat(p.precio),
+              });
+              showToast(`"${p.nombre}" agregado al carrito`);
             }}
           >
-            🛒 Añadir al carrito
+            Añadir al carrito
           </button>
         )}
       </div>

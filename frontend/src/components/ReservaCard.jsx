@@ -1,9 +1,11 @@
 import EstadoPedidoBadge from "./EstadoPedidoBadge";
 
 export default function ReservaCard({ reserva, isAdmin, onChangeEstado }) {
+  const reservaId = reserva.id || reserva.id_reserva;
+  
   return (
     <div className="card" style={{ marginBottom: "1rem" }}>
-      <h2>Reserva #{reserva.id_reserva}</h2>
+      <h2>Reserva #{reservaId}</h2>
 
       <p><strong>Fecha:</strong> {reserva.fecha}</p>
       <p><strong>Hora:</strong> {reserva.hora}</p>

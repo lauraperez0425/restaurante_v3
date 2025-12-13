@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { crearCategoria } from "../api/categoriasApi";
+import { crearCategoria } from "../../../api/categoriasApi";
 import { useNavigate } from "react-router-dom";
 
 export default function CrearCategoriaPage() {
